@@ -1,4 +1,5 @@
 # Finds the cushion the player is looking at and tags it ect_cushion.
+# A cushion behind a wall doesn't count: ray removes the tag if a block is in the way.
 # Called by forward and start, as the player, at the player.
 #
 # LEAVES BEHIND: ect_cushion on the chosen cushion, or on nothing if the player
@@ -15,6 +16,13 @@ execute as @s at @s as @e[type=minecraft:cushion,distance=..3.5] on passengers o
 # at the cushion, the second step undoes the first and you land back on the cushion.
 # distance=..0.2 is how close you have to land, so it sets how precise the aim has to be.
 execute as @s at @s as @e[type=minecraft:cushion,distance=..3.5,tag=!ect_occupied] at @s facing entity @p[tag=ect_rider] eyes positioned ^ ^ ^1 rotated as @p[tag=ect_rider] positioned ^ ^ ^1 if entity @s[distance=..0.2] at @s run tag @s add ect_cushion
+# Wall check. Has to come AFTER the look check, because it only runs when a cushion is
+# already tagged. Moves to the player's eyes, aims at the tagged cushion, and runs ray,
+# which removes ect_cushion if a block is in the way.
+# "anchored feet" must stay right after "positioned ^ ^ ^". The anchor doesn't reset on its
+# own, and if it stayed on eyes, every ^ step in ray would add eye height and the ray would
+# climb upward. It also has to come before "facing", which uses the anchor too.
+execute if entity @e[type=minecraft:cushion,tag=ect_cushion] anchored eyes positioned ^ ^ ^ anchored feet facing entity @e[type=minecraft:cushion,tag=ect_cushion,sort=nearest,limit=1] feet run function easycushiontravel:ray
 # Remove the temporary tags. ect_cushion stays for the caller.
 tag @s remove ect_rider
 tag @e[type=minecraft:cushion] remove ect_occupied

@@ -22,4 +22,4 @@ scoreboard objectives add ect_left minecraft.custom:minecraft.leave_game
 # Admins can change it with: /scoreboard players set #delay ect_config <seconds>
 # Only set the default when #delay is missing (an unset score matches no range),
 # so a custom value survives /reload. A negative value also gets reset to the default.
-execute unless score #delay ect_config matches 0.. run scoreboard players set #delay ect_config 3
+execute unless score #delay ect_config matches 0.. run scoreboard players set #delay ect_config 1
