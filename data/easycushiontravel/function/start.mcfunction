@@ -3,3 +3,4 @@ execute unless entity @e[type=cushion,tag=ect_cushion,sort=nearest,limit=1] run 
 tag @s add ect_traveling
 tellraw @s {"text":"Cushion Travel Started.","color":"green"}
 tag @e[type=cushion,tag=ect_cushion] remove ect_cushion
+scoreboard players set @s ect_idle 0
